@@ -22,4 +22,20 @@ public class ClienteDaoImpl implements IClienteDao{
         /** Cosulta JPQL*/
         return em.createQuery("select c from Cliente c").getResultList();
     }
+
+    @Override
+    @Transactional
+    public void save(Cliente cliente) {
+
+        if (cliente.getId() != null && cliente.getId()>0){
+            em.merge(cliente);
+        }else{
+            em.persist(cliente);
+        }
+    }
+
+    @Override
+    public Cliente findOne(Long id) {
+        return em.find(Cliente.class, id);
+    }
 }
