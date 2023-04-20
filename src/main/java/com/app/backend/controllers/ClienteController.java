@@ -1,8 +1,8 @@
 package com.app.backend.controllers;
 
 
-import com.app.backend.models.dao.IClienteDao;
 import com.app.backend.models.entitys.Cliente;
+import com.app.backend.models.service.IClienteService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,12 +20,12 @@ import java.util.Map;
 public class ClienteController {
 
     @Autowired
-    IClienteDao clienteDao;
+    IClienteService clienteService;
 
     @RequestMapping(value = "/listar", method = RequestMethod.GET)
     public String listar(Model model){
         model.addAttribute("titulo", "Listado de clientes");
-        model.addAttribute("clientes", clienteDao.findAll());
+        model.addAttribute("clientes", clienteService.findAll());
         return "listar";
     }
 
@@ -43,7 +43,7 @@ public class ClienteController {
             model.addAttribute("titulo", "Formulario Cliente");
             return "form";
         }
-        clienteDao.save(cliente);
+        clienteService.save(cliente);
         status.isComplete();
         return "redirect:listar";
     }
@@ -53,7 +53,7 @@ public class ClienteController {
         Cliente cliente = null;
 
         if (id>0){
-            cliente = clienteDao.findOne(id);
+            cliente = clienteService.findOne(id);
         }else{
             return "redirect:/listar";
         }
@@ -61,6 +61,15 @@ public class ClienteController {
         model.put("cliente", cliente);
         model.put("titulo", "Editar Cliente");
         return "form";
+    }
+
+    @RequestMapping(value = "/eliminar/{id}")
+    public String eliminar(@PathVariable(value = "id") Long id){
+        if (id>0){
+            clienteService.delete(id);
+        }
+
+        return "redirect:/listar";
     }
 
 

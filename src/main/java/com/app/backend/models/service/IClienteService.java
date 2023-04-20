@@ -1,12 +1,13 @@
-package com.app.backend.models.dao;
+package com.app.backend.models.service;
 
 import com.app.backend.models.entitys.Cliente;
 
 import java.util.List;
 
-public interface IClienteDao {
+public interface IClienteService {
 
     List<Cliente> findAll();
+
     void save(Cliente cliente);
 
     Cliente findOne(Long id);
